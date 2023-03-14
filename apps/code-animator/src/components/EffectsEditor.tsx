@@ -13,7 +13,7 @@ import {
   useProject,
   useSprites,
   useIsVisuallySelected,
-} from "../lib/EditorContext";
+} from "../lib/EditorState";
 
 const EffectsEditor = () => {
   const sprites = useSprites();

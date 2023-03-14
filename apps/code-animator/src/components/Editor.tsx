@@ -4,7 +4,7 @@ import { javascript } from "@codemirror/lang-javascript";
 import { githubDark as editorTheme } from "@uiw/codemirror-themes-all";
 
 import { FONTS } from "engine";
-import { useProject, useFrame, useFrameUpdate } from "../lib/EditorContext";
+import { useProject, useFrame, useFrameUpdate } from "../lib/EditorState";
 import { BOTTOM_HEIGHT } from "../lib/constants";
 
 function Editor() {

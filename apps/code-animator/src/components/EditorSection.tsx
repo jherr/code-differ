@@ -1,7 +1,7 @@
 import EffectsEditor from "./EffectsEditor";
 import Editor from "./Editor";
 
-import { useProject, useFrame } from "../lib/EditorContext";
+import { useProject, useFrame } from "../lib/EditorState";
 
 function EditorSection() {
   const project = useProject();

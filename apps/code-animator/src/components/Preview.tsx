@@ -6,7 +6,7 @@ import {
   useTime,
   usePreviewError,
   useLayers,
-} from "../lib/EditorContext";
+} from "../lib/EditorState";
 
 const Preview = () => {
   const layers = useLayers(PREVIEW_FONT_SIZE);

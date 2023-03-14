@@ -7,7 +7,7 @@ import {
 } from "@mui/icons-material";
 import { useWindowSize } from "usehooks-ts";
 
-import { useProject, useSetTime, useTime } from "../lib/EditorContext";
+import { useProject, useSetTime, useTime } from "../lib/EditorState";
 
 const secondsToTime = (secs: number, precision: number = 1) => {
   const minutes = Math.floor(secs / 60);

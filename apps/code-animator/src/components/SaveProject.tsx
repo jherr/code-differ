@@ -1,6 +1,6 @@
 import { IconButton, Tooltip } from "@mui/material";
 import { Save as SaveIcon } from "@mui/icons-material";
-import { useProject } from "../lib/EditorContext";
+import { useProject } from "../lib/EditorState";
 
 function SaveProject() {
   const project = useProject();

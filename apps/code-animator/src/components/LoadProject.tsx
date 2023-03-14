@@ -1,7 +1,7 @@
 import { useRef } from "react";
 import { IconButton, Tooltip } from "@mui/material";
 import { FileOpen as LoadIcon } from "@mui/icons-material";
-import { useProjectUpdate } from "../lib/EditorContext";
+import { useProjectUpdate } from "../lib/EditorState";
 
 function LoadProject() {
   const updateProject = useProjectUpdate();

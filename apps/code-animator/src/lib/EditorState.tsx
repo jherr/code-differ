@@ -1,0 +1,185 @@
+import { atom, useAtomValue, useSetAtom } from "jotai";
+
+import {
+  Project,
+  Keyframe,
+  PREVIEW_FONT_SIZE,
+  updateProjectFrame,
+  getEffectFrames,
+  getCodeFrames,
+  getCodeBlocks,
+  getCodeTimes,
+  createMeasuredSprites,
+  getLayers,
+} from "engine";
+
+import Code1 from "./Code-1-project";
+
+const sortFrames = (frames: Keyframe[]): Keyframe[] =>
+  [...frames].sort((a, b) => (a.time < b.time ? -1 : 1));
+
+const ensureKeyframes = (project: Project) => ({
+  ...project,
+  keyframes: sortFrames(project.keyframes),
+});
+
+const projectAtom = atom<Project>(Code1);
+const timeAtom = atom(4);
+const selectionStart = atom<number | null>(null);
+const selectionEnd = atom<number | null>(null);
+
+const safeProject = atom(
+  (get) => get(projectAtom),
+  (get, set, update: Partial<Project>) => {
+    set(projectAtom, ensureKeyframes({ ...get(projectAtom), ...update }));
+  }
+);
+
+const effectFramesAtom = atom((get) =>
+  getEffectFrames(get(safeProject).keyframes)
+);
+const codeFramesAtom = atom((get) => getCodeFrames(get(safeProject).keyframes));
+const codeBlocksAtom = atom((get) => getCodeBlocks(get(codeFramesAtom)));
+
+const measuredSpritesAtom = atom((get) => {
+  const project = get(projectAtom);
+  const { sprites, error } = createMeasuredSprites(project, PREVIEW_FONT_SIZE);
+  return { sprites, error };
+});
+
+const previewErrorAtom = atom((get) => get(measuredSpritesAtom).error);
+const spritesAtom = atom((get) => get(measuredSpritesAtom).sprites);
+
+const frameAtom = atom((get) => {
+  const project = get(safeProject);
+  const time = get(timeAtom);
+  let frame = -1;
+  for (let i = 0; i < project.keyframes.length; i++) {
+    if (project.keyframes[i].time > time) break;
+    frame = i;
+  }
+  return frame;
+});
+
+const stepAtom = atom((get) => {
+  const project = get(safeProject);
+  const time = get(timeAtom);
+  const times = getCodeTimes(project.keyframes);
+  let step = 0;
+  for (let i = 0; i < times.length; i++) {
+    if (times[i] > time) break;
+    step = i;
+  }
+  return step;
+});
+
+const frameUpdateAtom = atom(
+  () => null,
+  (get, set, frameUpdates: Partial<Keyframe>) => {
+    const project = get(safeProject);
+    const frame = get(frameAtom);
+    set(safeProject, updateProjectFrame(project, frame, frameUpdates));
+  }
+);
+
+const toggleEffectAtom = atom(
+  () => null,
+  (get, set) => {
+    const frame = get(frameAtom);
+    const project = get(safeProject);
+    const sprites = get(spritesAtom);
+
+    return () => {
+      if (project.keyframes[frame].type === "effects") {
+        const effects = project.keyframes[frame]?.highlight! ?? {};
+        const hilight = Object.values(effects).some((t) => !t);
+        set(frameUpdateAtom, {
+          highlight: sprites.reduce((acc, t, i) => {
+            acc[i] = hilight;
+            return acc;
+          }, {} as Record<number, boolean>),
+        });
+      }
+    };
+  }
+);
+
+export const useTime = () => useAtomValue(timeAtom);
+export const useSetTime = () => useSetAtom(timeAtom);
+
+export const useProject = () => useAtomValue(safeProject);
+export const useProjectUpdate = () => useSetAtom(safeProject);
+
+export const useFrameUpdate = () => useSetAtom(frameUpdateAtom);
+
+export const useFrame = () => useAtomValue(frameAtom);
+export const useStep = () => useAtomValue(stepAtom);
+
+export const useEffectFrames = () => useAtomValue(effectFramesAtom);
+export const useCodeFrames = () => useAtomValue(codeFramesAtom);
+export const useCodeBlocks = () => useAtomValue(codeBlocksAtom);
+
+export const useSprites = () => useAtomValue(spritesAtom);
+export const usePreviewError = () => useAtomValue(previewErrorAtom);
+
+export const useSelectionStart = () => useAtomValue(selectionStart);
+export const useSetSelectionStart = () => useSetAtom(selectionStart);
+export const useSelectionEnd = () => useAtomValue(selectionEnd);
+export const useSetSelectionEnd = () => useSetAtom(selectionEnd);
+
+export const useToggleEffect = () => useSetAtom(toggleEffectAtom);
+
+export const useIsVisuallySelected = () => {
+  const selectionStart = useSelectionStart();
+  const selectionEnd = useSelectionEnd();
+  const sprites = useSprites();
+  const step = useStep();
+
+  return (i: number) => {
+    if (selectionStart === null || selectionEnd === null) return false;
+
+    const startLeft = sprites[selectionStart].pixelLocs![step]![0];
+    const startTop = sprites[selectionStart].pixelLocs![step]![1];
+    const endLeft = sprites[selectionEnd].pixelLocs![step]![0];
+    const endTop = sprites[selectionEnd].pixelLocs![step]![1];
+
+    const left = sprites[i].pixelLocs?.[step]?.[0];
+    const top = sprites[i].pixelLocs?.[step]?.[1];
+
+    if (!left || !top) return false;
+    if (top < startTop || top > endTop) return false;
+    if (top === startTop && left < startLeft) return false;
+    if (top === endTop && left > endLeft) return false;
+    return true;
+  };
+};
+
+export const useSetEffectOnShown = () => {
+  const isVisuallySelected = useIsVisuallySelected();
+  const sprites = useSprites();
+  const frame = useFrame();
+  const project = useProject();
+
+  const updateFrame = useFrameUpdate();
+  const setSelectionStart = useSetSelectionStart();
+  const setSelectionEnd = useSetSelectionEnd();
+
+  const effects = project.keyframes[frame]?.highlight!;
+
+  return () => {
+    updateFrame({
+      highlight: sprites.reduce((acc, t, i) => {
+        acc[i] = effects[i] || isVisuallySelected(i);
+        return acc;
+      }, {} as Record<number, boolean>),
+    });
+    setSelectionStart(null);
+    setSelectionEnd(null);
+  };
+};
+
+export const useLayers = (fontSize: number) => {
+  const project = useProject();
+
+  return getLayers(project, fontSize);
+};

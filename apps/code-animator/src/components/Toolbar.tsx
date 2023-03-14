@@ -27,7 +27,7 @@ import {
   useStep,
   useCodeBlocks,
   useFrameUpdate,
-} from "../lib/EditorContext";
+} from "../lib/EditorState";
 
 import Settings from "./Settings";
 import SaveLayers from "./SaveLayers";
