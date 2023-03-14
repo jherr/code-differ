@@ -14,43 +14,21 @@ importers:
 
   apps/code-animator:
     specifiers:
-      '@codemirror/lang-javascript': ^6.1.4
-      '@codemirror/view': ^6.9.2
-      '@emotion/react': ^11.10.5
-      '@emotion/styled': ^11.10.5
-      '@mui/icons-material': ^5.10.9
-      '@mui/material': ^5.10.11
       '@types/react': ^18.0.27
       '@types/react-dom': ^18.0.10
-      '@uiw/codemirror-themes-all': ^4.19.9
-      '@uiw/react-codemirror': ^4.19.9
       '@vitejs/plugin-react': ^3.1.0
-      engine: workspace:*
       eslint: ^8.35.0
-      jotai: ^2.0.3
-      preview-react: workspace:*
       react: ^18.2.0
       react-dom: ^18.2.0
       tsconfig: workspace:*
       typescript: ^4.9.3
-      usehooks-ts: ^2.9.1
+      ui-react: workspace:*
       vite: ^4.1.0
     dependencies:
-      '@codemirror/lang-javascript': 6.1.4
-      '@codemirror/view': 6.9.2
-      '@emotion/react': 11.10.6_pmekkgnqduwlme35zpnqhenc34
-      '@emotion/styled': 11.10.6_oouaibmszuch5k64ms7uxp2aia
-      '@mui/icons-material': 5.11.11_ao76n7r2cajsoyr3cbwrn7geoi
-      '@mui/material': 5.11.12_xqeqsl5kvjjtyxwyi3jhw3yuli
-      '@uiw/codemirror-themes-all': 4.19.9_@codemirror+view@6.9.2
-      '@uiw/react-codemirror': 4.19.9_2hmgtxhxkw2pz5cuyorxi7oyvi
-      engine: link:../../packages/engine
       eslint: 8.36.0
-      jotai: 2.0.3_react@18.2.0
-      preview-react: link:../../packages/preview-react
       react: 18.2.0
       react-dom: 18.2.0_react@18.2.0
-      usehooks-ts: 2.9.1_biqbaboplfbrettd7655fr4n2y
+      ui-react: link:../../packages/ui-react
     devDependencies:
       '@types/react': 18.0.28
       '@types/react-dom': 18.0.11
@@ -167,6 +145,51 @@ importers:
 
   packages/tsconfig:
     specifiers: {}
+
+  packages/ui-react:
+    specifiers:
+      '@codemirror/lang-javascript': ^6.1.4
+      '@codemirror/view': ^6.9.2
+      '@emotion/react': ^11.10.5
+      '@emotion/styled': ^11.10.5
+      '@mui/icons-material': ^5.10.9
+      '@mui/material': ^5.10.11
+      '@types/react': ^18.0.17
+      '@types/react-dom': ^18.0.6
+      '@uiw/codemirror-themes-all': ^4.19.9
+      '@uiw/react-codemirror': ^4.19.9
+      engine: workspace:*
+      eslint: ^7.32.0
+      eslint-config-custom: workspace:*
+      jotai: ^2.0.3
+      preview-react: workspace:*
+      react: ^18.2.0
+      react-dom: ^18.2.0
+      tsconfig: workspace:*
+      typescript: ^4.5.2
+      usehooks-ts: ^2.9.1
+    dependencies:
+      '@codemirror/lang-javascript': 6.1.4
+      '@codemirror/view': 6.9.2
+      '@emotion/react': 11.10.6_pmekkgnqduwlme35zpnqhenc34
+      '@emotion/styled': 11.10.6_oouaibmszuch5k64ms7uxp2aia
+      '@mui/icons-material': 5.11.11_ao76n7r2cajsoyr3cbwrn7geoi
+      '@mui/material': 5.11.12_xqeqsl5kvjjtyxwyi3jhw3yuli
+      '@uiw/codemirror-themes-all': 4.19.9_@codemirror+view@6.9.2
+      '@uiw/react-codemirror': 4.19.9_2hmgtxhxkw2pz5cuyorxi7oyvi
+      engine: link:../engine
+      jotai: 2.0.3_react@18.2.0
+      preview-react: link:../preview-react
+      react: 18.2.0
+      react-dom: 18.2.0_react@18.2.0
+      usehooks-ts: 2.9.1_biqbaboplfbrettd7655fr4n2y
+    devDependencies:
+      '@types/react': 18.0.28
+      '@types/react-dom': 18.0.11
+      eslint: 7.32.0
+      eslint-config-custom: link:../eslint-config-custom
+      tsconfig: link:../tsconfig
+      typescript: 4.9.5
 
 packages:
 
