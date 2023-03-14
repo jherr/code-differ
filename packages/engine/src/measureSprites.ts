@@ -1,38 +1,28 @@
 import { Sprite, CompletedSprite } from "./types";
 
-let measureText = (
+let canvas: any = null;
+let context: any = null;
+
+const measureText = (
   text: string,
   font: string,
   fontSize: number
 ): {
   width: number;
   height: number;
-} => ({
-  width: 10,
-  height: 10,
-});
+} => {
+  canvas = canvas || document?.createElement("canvas");
+  context = context || canvas?.getContext("2d");
 
-if (typeof process === "undefined" || process?.browser) {
-  const canvas = document?.createElement("canvas");
-  const context = canvas?.getContext("2d");
+  context!.font = `${fontSize}px ${font}`;
 
-  measureText = (
-    text: string,
-    font: string,
-    fontSize: number
-  ): {
-    width: number;
-    height: number;
-  } => {
-    context!.font = `${fontSize}px ${font}`;
-    const { width, actualBoundingBoxAscent, actualBoundingBoxDescent } =
-      context!.measureText(text);
-    return {
-      width,
-      height: actualBoundingBoxAscent + actualBoundingBoxDescent,
-    };
+  const { width, actualBoundingBoxAscent, actualBoundingBoxDescent } =
+    context!.measureText(text);
+  return {
+    width,
+    height: actualBoundingBoxAscent + actualBoundingBoxDescent,
   };
-}
+};
 
 const measureSprites = (
   sprites: Sprite[],

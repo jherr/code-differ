@@ -1,6 +1,7 @@
-import { app } from "electron";
+import { app, ipcMain } from "electron";
 import serve from "electron-serve";
 import { createWindow } from "./helpers";
+import sendToAE from "ae-builder";
 
 const isProd: boolean = process.env.NODE_ENV === "production";
 
@@ -26,6 +27,10 @@ if (isProd) {
     // mainWindow.webContents.openDevTools();
   }
 })();
+
+ipcMain.handle("sendToAfterEffects", async (_event, val) => {
+  await sendToAE(val);
+});
 
 app.on("window-all-closed", () => {
   app.quit();

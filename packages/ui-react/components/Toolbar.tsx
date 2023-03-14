@@ -12,7 +12,16 @@ import {
   PlayArrow as PlayIcon,
   Pause as PauseIcon,
   ClearAll as ClearIcon,
+  IosShare as ExportIcon,
 } from "@mui/icons-material";
+
+import {
+  FONTS,
+  createMeasuredSprites,
+  calculateExtents,
+  getLayers,
+  MARGIN,
+} from "engine";
 
 import {
   useProject,
@@ -27,7 +36,10 @@ import {
   useStep,
   useCodeBlocks,
   useFrameUpdate,
+  useCodeFrames,
 } from "../lib/EditorState";
+
+import { useAnimatorUI } from "./AnimatorUIContext";
 
 import Settings from "./Settings";
 import SaveLayers from "./SaveLayers";
@@ -40,6 +52,8 @@ function Toolbar() {
   const frame = useFrame();
   const setTime = useSetTime();
   const updateProject = useProjectUpdate();
+
+  const animatorCtx = useAnimatorUI();
 
   const [settingsOpen, setSettingsOpen] = useState(false);
 
@@ -144,6 +158,51 @@ function Toolbar() {
   };
 
   const theme = useTheme();
+
+  const codeFrames = useCodeFrames();
+
+  console.log(animatorCtx);
+
+  const onSendToAfterEffects = () => {
+    const { sprites } = createMeasuredSprites(project, 50);
+    const { extents, extentsByCodeSegment } = calculateExtents(sprites);
+
+    const layers = getLayers(project, 50);
+
+    const rectangles: {
+      time: number;
+      size: number[];
+      anchor: number[];
+    }[] = [];
+    if (project.showBackground) {
+      let anchorOffset = -(extentsByCodeSegment[0][1] + MARGIN);
+      for (const codeExtentIndex in extentsByCodeSegment) {
+        const codeExtent = extentsByCodeSegment[codeExtentIndex];
+        if (+codeExtentIndex > 0) {
+          anchorOffset -=
+            (codeExtent[1] - extentsByCodeSegment[+codeExtentIndex - 1][1]) / 2;
+        }
+        rectangles.push({
+          time: codeFrames[+codeExtentIndex].time,
+          size: [extents[0] + MARGIN, codeExtent[1] + MARGIN],
+          anchor: [-(extents[0] + MARGIN), anchorOffset],
+        });
+      }
+    }
+
+    const data = {
+      compName: project.name,
+      rectangles,
+      fontRegular: FONTS[project.font].postRegular,
+      fontItalic: FONTS[project.font].postItalic,
+      fontSize: 50,
+      totalTime: project.totalTime,
+      extents: [extents[0] + MARGIN, extents[1] + MARGIN],
+      layers,
+    };
+
+    animatorCtx?.sendToAfterEffects?.(data);
+  };
 
   return (
     <>
@@ -281,6 +340,14 @@ function Toolbar() {
             <SettingsIcon />
           </IconButton>
         </Tooltip>
+
+        {animatorCtx && animatorCtx?.sendToAfterEffects && (
+          <Tooltip title="Send to After Effects">
+            <IconButton onClick={onSendToAfterEffects} color="primary">
+              <ExportIcon />
+            </IconButton>
+          </Tooltip>
+        )}
       </Box>
     </>
   );
