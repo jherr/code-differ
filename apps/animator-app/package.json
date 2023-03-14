@@ -1,0 +1,31 @@
+{
+  "private": true,
+  "name": "animator-app",
+  "description": "Code Aniamator Application",
+  "version": "1.0.0",
+  "main": "app/background.js",
+  "scripts": {
+    "dev": "nextron",
+    "build": "nextron build",
+    "postinstall": "electron-builder install-app-deps"
+  },
+  "dependencies": {
+    "conf": "^11.0.1",
+    "electron-serve": "^1.1.0",
+    "electron-store": "^8.1.0",
+    "ui-react": "workspace:*"
+  },
+  "devDependencies": {
+    "@babel/runtime-corejs3": "^7.21.0",
+    "@types/node": "^18.11.18",
+    "@types/react": "^18.0.26",
+    "electron": "^21.3.3",
+    "electron-builder": "^23.6.0",
+    "next": "^13.1.0",
+    "nextron": "^8.5.0",
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0",
+    "tsconfig": "workspace:*",
+    "typescript": "^4.9.4"
+  }
+}

@@ -1,3 +1,4 @@
+import { useEffect } from "react";
 import { Grid, CssBaseline, Box } from "@mui/material";
 
 import Preview from "./components/Preview";
@@ -5,9 +6,18 @@ import Timeline from "./components/Timeline";
 import Toolbar from "./components/Toolbar";
 import EditorSection from "./components/EditorSection";
 
+import { useProjectUpdate } from "./lib/EditorState";
+
 import { BOTTOM_HEIGHT } from "./lib/constants";
 
+import Code1 from "./lib/Code-1-project";
+
 function App() {
+  const updateProject = useProjectUpdate();
+  useEffect(() => {
+    updateProject(Code1);
+  }, []);
+
   return (
     <Box>
       <CssBaseline />

@@ -13,8 +13,6 @@ import {
   getLayers,
 } from "engine";
 
-import Code1 from "./Code-1-project";
-
 const sortFrames = (frames: Keyframe[]): Keyframe[] =>
   [...frames].sort((a, b) => (a.time < b.time ? -1 : 1));
 
@@ -23,12 +21,19 @@ const ensureKeyframes = (project: Project) => ({
   keyframes: sortFrames(project.keyframes),
 });
 
-const projectAtom = atom<Project>(Code1);
+const projectAtom = atom<Project>({
+  keyframes: [],
+  name: "Untitled",
+  totalTime: 0,
+  font: "JetBrains Mono",
+  animationDuration: 0.3,
+  showBackground: false,
+});
 const timeAtom = atom(4);
-const selectionStart = atom<number | null>(null);
-const selectionEnd = atom<number | null>(null);
+const selectionStartAtom = atom<number | false>(false);
+const selectionEndAtom = atom<number | false>(false);
 
-const safeProject = atom(
+const safeProjectAtom = atom(
   (get) => get(projectAtom),
   (get, set, update: Partial<Project>) => {
     set(projectAtom, ensureKeyframes({ ...get(projectAtom), ...update }));
@@ -36,9 +41,11 @@ const safeProject = atom(
 );
 
 const effectFramesAtom = atom((get) =>
-  getEffectFrames(get(safeProject).keyframes)
+  getEffectFrames(get(safeProjectAtom).keyframes)
 );
-const codeFramesAtom = atom((get) => getCodeFrames(get(safeProject).keyframes));
+const codeFramesAtom = atom((get) =>
+  getCodeFrames(get(safeProjectAtom).keyframes)
+);
 const codeBlocksAtom = atom((get) => getCodeBlocks(get(codeFramesAtom)));
 
 const measuredSpritesAtom = atom((get) => {
@@ -51,7 +58,7 @@ const previewErrorAtom = atom((get) => get(measuredSpritesAtom).error);
 const spritesAtom = atom((get) => get(measuredSpritesAtom).sprites);
 
 const frameAtom = atom((get) => {
-  const project = get(safeProject);
+  const project = get(safeProjectAtom);
   const time = get(timeAtom);
   let frame = -1;
   for (let i = 0; i < project.keyframes.length; i++) {
@@ -62,7 +69,7 @@ const frameAtom = atom((get) => {
 });
 
 const stepAtom = atom((get) => {
-  const project = get(safeProject);
+  const project = get(safeProjectAtom);
   const time = get(timeAtom);
   const times = getCodeTimes(project.keyframes);
   let step = 0;
@@ -76,9 +83,9 @@ const stepAtom = atom((get) => {
 const frameUpdateAtom = atom(
   () => null,
   (get, set, frameUpdates: Partial<Keyframe>) => {
-    const project = get(safeProject);
+    const project = get(safeProjectAtom);
     const frame = get(frameAtom);
-    set(safeProject, updateProjectFrame(project, frame, frameUpdates));
+    set(safeProjectAtom, updateProjectFrame(project, frame, frameUpdates));
   }
 );
 
@@ -86,7 +93,7 @@ const toggleEffectAtom = atom(
   () => null,
   (get, set) => {
     const frame = get(frameAtom);
-    const project = get(safeProject);
+    const project = get(safeProjectAtom);
     const sprites = get(spritesAtom);
 
     return () => {
@@ -107,8 +114,8 @@ const toggleEffectAtom = atom(
 export const useTime = () => useAtomValue(timeAtom);
 export const useSetTime = () => useSetAtom(timeAtom);
 
-export const useProject = () => useAtomValue(safeProject);
-export const useProjectUpdate = () => useSetAtom(safeProject);
+export const useProject = () => useAtomValue(safeProjectAtom);
+export const useProjectUpdate = () => useSetAtom(safeProjectAtom);
 
 export const useFrameUpdate = () => useSetAtom(frameUpdateAtom);
 
@@ -122,10 +129,10 @@ export const useCodeBlocks = () => useAtomValue(codeBlocksAtom);
 export const useSprites = () => useAtomValue(spritesAtom);
 export const usePreviewError = () => useAtomValue(previewErrorAtom);
 
-export const useSelectionStart = () => useAtomValue(selectionStart);
-export const useSetSelectionStart = () => useSetAtom(selectionStart);
-export const useSelectionEnd = () => useAtomValue(selectionEnd);
-export const useSetSelectionEnd = () => useSetAtom(selectionEnd);
+export const useSelectionStart = () => useAtomValue(selectionStartAtom);
+export const useSetSelectionStart = () => useSetAtom(selectionStartAtom);
+export const useSelectionEnd = () => useAtomValue(selectionEndAtom);
+export const useSetSelectionEnd = () => useSetAtom(selectionEndAtom);
 
 export const useToggleEffect = () => useSetAtom(toggleEffectAtom);
 
@@ -136,7 +143,7 @@ export const useIsVisuallySelected = () => {
   const step = useStep();
 
   return (i: number) => {
-    if (selectionStart === null || selectionEnd === null) return false;
+    if (selectionStart === false || selectionEnd === false) return false;
 
     const startLeft = sprites[selectionStart].pixelLocs![step]![0];
     const startTop = sprites[selectionStart].pixelLocs![step]![1];
@@ -173,8 +180,8 @@ export const useSetEffectOnShown = () => {
         return acc;
       }, {} as Record<number, boolean>),
     });
-    setSelectionStart(null);
-    setSelectionEnd(null);
+    setSelectionStart(false);
+    setSelectionEnd(false);
   };
 };
 

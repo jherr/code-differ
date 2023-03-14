@@ -1,24 +1,38 @@
 import { Sprite, CompletedSprite } from "./types";
 
-const canvas = document.createElement("canvas");
-const context = canvas.getContext("2d");
-
-const measureText = (
+let measureText = (
   text: string,
   font: string,
   fontSize: number
 ): {
   width: number;
   height: number;
-} => {
-  context!.font = `${fontSize}px ${font}`;
-  const { width, actualBoundingBoxAscent, actualBoundingBoxDescent } =
-    context!.measureText(text);
-  return {
-    width,
-    height: actualBoundingBoxAscent + actualBoundingBoxDescent,
+} => ({
+  width: 10,
+  height: 10,
+});
+
+if (typeof process === "undefined" || process?.browser) {
+  const canvas = document?.createElement("canvas");
+  const context = canvas?.getContext("2d");
+
+  measureText = (
+    text: string,
+    font: string,
+    fontSize: number
+  ): {
+    width: number;
+    height: number;
+  } => {
+    context!.font = `${fontSize}px ${font}`;
+    const { width, actualBoundingBoxAscent, actualBoundingBoxDescent } =
+      context!.measureText(text);
+    return {
+      width,
+      height: actualBoundingBoxAscent + actualBoundingBoxDescent,
+    };
   };
-};
+}
 
 const measureSprites = (
   sprites: Sprite[],

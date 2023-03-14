@@ -56,14 +56,14 @@ const EffectsEditor = () => {
       setSelectionEnd(index);
       setTracking(true);
     } else {
-      setSelectionStart(null);
-      setSelectionEnd(null);
+      setSelectionStart(false);
+      setSelectionEnd(false);
       setTracking(false);
     }
   };
 
   const onMouseMove = (e: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
-    if (!effects || !tracking || selectionStart === null) return;
+    if (!effects || !tracking || selectionStart === false) return;
 
     const target = e.target as HTMLDivElement;
     const index = parseInt(target.getAttribute("data-index") || "-1");
