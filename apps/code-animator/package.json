@@ -19,6 +19,7 @@
     "@uiw/react-codemirror": "^4.19.9",
     "engine": "workspace:*",
     "eslint": "^8.35.0",
+    "preview-react": "workspace:*",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "usehooks-ts": "^2.9.1"

@@ -5,9 +5,16 @@ import calculateExtents from "./src/extents";
 import FONTS from "./src/fonts";
 import { updateProjectFrame } from "./src/project";
 import { calculateLayerAtTime, getLayersWithMaps } from "./src/layerAtTime";
-
-const MARGIN = 20;
-const PREVIEW_FONT_SIZE = 20;
+import { MARGIN, PREVIEW_FONT_SIZE } from "./src/constants";
+import {
+  createMeasuredSprites,
+  getLayers,
+  getCodeBlocks,
+  getCodeFrames,
+  getCodeTimes,
+  getEffectFrames,
+  getLayerExtents,
+} from "./src/helpers";
 
 export type {
   Sprite,
@@ -30,4 +37,11 @@ export {
   FONTS,
   MARGIN,
   PREVIEW_FONT_SIZE,
+  createMeasuredSprites,
+  getLayers,
+  getCodeBlocks,
+  getCodeFrames,
+  getCodeTimes,
+  getEffectFrames,
+  getLayerExtents,
 };

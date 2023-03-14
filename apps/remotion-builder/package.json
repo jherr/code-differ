@@ -1,0 +1,38 @@
+{
+  "name": "remotion-builder",
+  "version": "1.0.0",
+  "description": "Remotion code animation builder",
+  "private": true,
+  "sideEffects": [
+    "*.css"
+  ],
+  "scripts": {
+    "dev": "remotion preview",
+    "upgrade": "remotion upgrade",
+    "test": "eslint src --ext ts,tsx,js,jsx && tsc",
+    "build-sequence": "remotion render --sequence --image-format=png --pixel-format=yuva444p10le --codec=prores --prores-profile=4444 MyComp out/video",
+    "build-transparent": "remotion render --quality=100 --image-format=png --pixel-format=yuva444p10le --codec=prores --prores-profile=4444 MyComp out/video.mov",
+    "build": "remotion render --image-format=png --pixel-format=yuv422p10le --codec=prores --prores-profile=4444 MyComp out/video.mov",
+    "build-webm": "remotion render --image-format=png --pixel-format=yuva420p --codec=vp9 MyComp out/video.webm"
+  },
+  "repository": {},
+  "license": "UNLICENSED",
+  "dependencies": {
+    "@remotion/cli": "3.3.75",
+    "engine": "workspace:*",
+    "preview-react": "workspace:*",
+    "react": "^18.0.0",
+    "react-dom": "^18.0.0",
+    "remotion": "3.3.75"
+  },
+  "devDependencies": {
+    "@remotion/eslint-config": "3.3.75",
+    "@types/react": "^18.0.26",
+    "@types/web": "^0.0.86",
+    "eslint": "^8.30.0",
+    "prettier": "^2.8.1",
+    "tsconfig": "workspace:*",
+    "typescript": "^4.9.4"
+  },
+  "packageManager": "npm@8.11.0"
+}

@@ -3,45 +3,20 @@ import { createContext, useState, useContext, useMemo } from "react";
 import {
   Project,
   Keyframe,
-  Layer,
-  FONTS,
-  MARGIN,
   PREVIEW_FONT_SIZE,
   updateProjectFrame,
-  convertCodeBlocksToTokens,
-  measureSprites,
-  calculateLayers,
+  getEffectFrames,
+  getCodeFrames,
+  getCodeBlocks,
+  getCodeTimes,
+  createMeasuredSprites,
+  getLayers,
 } from "engine";
 
 import Code1 from "./Code-1-project";
 
 const sortFrames = (frames: Keyframe[]): Keyframe[] =>
   [...frames].sort((a, b) => (a.time < b.time ? -1 : 1));
-
-export const createMeasuredSprites = (project: Project, fontSize: number) => {
-  if (!project.keyframes || project.keyframes.length === 0) {
-    return { sprites: [] as ReturnType<typeof measureSprites>, error: null };
-  }
-
-  const { sprites, tracks, error } = convertCodeBlocksToTokens(
-    getCodeBlocks(getCodeFrames(project.keyframes))
-  );
-
-  if (error) {
-    return { sprites: [] as ReturnType<typeof measureSprites>, error };
-  }
-
-  return {
-    sprites: measureSprites(
-      sprites,
-      FONTS[project.font].web,
-      fontSize,
-      tracks,
-      MARGIN
-    ),
-    error: null,
-  };
-};
 
 const useEditorState = () => {
   const [project, setProject] = useState<Project>(Code1);
@@ -146,19 +121,10 @@ export const useStep = () => {
   return step;
 };
 
-const getEffectFrames = (keyframes: Keyframe[]) =>
-  keyframes.filter(({ type }) => type === "effects");
 export const useEffectFrames = () => {
   const project = useProject();
   return useMemo(() => getEffectFrames(project.keyframes), [project.keyframes]);
 };
-
-const getCodeFrames = (keyframes: Keyframe[]) =>
-  keyframes.filter(({ type }) => type === "code");
-const getCodeBlocks = (keyframes: Keyframe[]) =>
-  getCodeFrames(keyframes).map(({ code }) => code!);
-const getCodeTimes = (keyframes: Keyframe[]) =>
-  getCodeFrames(keyframes).map(({ time }) => time);
 
 export const useCodeFrames = () => {
   const project = useProject();
@@ -261,29 +227,8 @@ export const useSetEffectOnShown = () => {
   };
 };
 
-export const getLayers = (project: Project, fontSize: number) => {
-  return calculateLayers(
-    createMeasuredSprites(project, fontSize).sprites,
-    getEffectFrames(project.keyframes),
-    getCodeTimes(project.keyframes),
-    project.totalTime,
-    project.animationDuration
-  );
-};
-
 export const useLayers = (fontSize: number) => {
   const project = useProject();
 
   return getLayers(project, fontSize);
-};
-
-export const getLayerExtents = (layers: Layer[]) => {
-  let width = 0;
-  let height = 0;
-  for (const l of layers) {
-    const [x, y] = [l.location[0] + l.width, l.location[1]];
-    if (x > width) width = x;
-    if (y > height) height = y;
-  }
-  return [width + MARGIN, height + MARGIN];
 };
