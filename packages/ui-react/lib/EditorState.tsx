@@ -25,7 +25,7 @@ const projectAtom = atom<Project>({
   keyframes: [],
   name: "Untitled",
   totalTime: 10,
-  font: "JetBrains Mono",
+  font: "Dank Mono",
   animationDuration: 0.3,
   showBackground: false,
 });

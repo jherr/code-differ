@@ -2,7 +2,7 @@ import { Project } from "engine";
 
 const project: Project = {
   name: "Code-1",
-  font: "JetBrains Mono",
+  font: "Dank Mono",
   keyframes: [
     {
       type: "code",

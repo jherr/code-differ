@@ -144,7 +144,7 @@ function Toolbar() {
       setTime((t) => (t + 0.1) % project.totalTime);
     }, 100);
     return () => clearInterval(interval);
-  }, [playing, project.totalTime]);
+  }, [playing, project.totalTime, setTime]);
 
   const onClearProject = () => {
     updateProject({

@@ -25,14 +25,17 @@ const Preview = ({
   width?: string | number;
   height?: string | number;
 }) => {
-  const layersWithMaps = useMemo(() => getLayersWithMaps(layers), [layers]);
+  const layersWithMaps = useMemo(
+    () => getLayersWithMaps(layers),
+    [layers, project]
+  );
   const layersAtTime = useMemo(
     () => layersWithMaps.map((l) => calculateLayerAtTime(time, l)),
-    [layersWithMaps, time]
+    [layersWithMaps, time, project]
   );
   const [calculatedWidth, calculatedHeight] = useMemo(
     () => getLayerExtents(layers),
-    [layers]
+    [layers, project]
   );
 
   return (

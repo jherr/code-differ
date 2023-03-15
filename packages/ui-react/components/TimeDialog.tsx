@@ -20,9 +20,10 @@ function TimeDialog({
   onSave: (time: number | null) => void;
 }) {
   const [time, setTime] = useState(startTime);
+
   useEffect(() => {
     setTime(startTime);
-  }, [open]);
+  }, [open, setTime]);
 
   return (
     <Dialog open={open} fullWidth maxWidth="sm">
