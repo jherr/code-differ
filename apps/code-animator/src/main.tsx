@@ -3,11 +3,10 @@ import ReactDOM from "react-dom/client";
 import App from "ui-react";
 import "./index.css";
 
-const font = new FontFace("Dank Mono", "url(DankMono-Regular.ttf))", {
-  style: "normal",
-  weight: "400",
-  stretch: "condensed",
-});
+const font = new FontFace(
+  "Dank Mono",
+  "url(DankMono-Regular.ttf), url(DankMono-Bold.ttf), url(DankMono-Italic.ttf)"
+);
 
 document.fonts.add(font);
 
@@ -16,7 +15,7 @@ const AppWithFontCheck = () => {
   React.useEffect(() => {
     font.load().then(() => setFontloaded(true));
   }, []);
-  return fontloaded ? <App /> : <div>Loading...</div>;
+  return fontloaded ? <App /> : <div />;
 };
 
 ReactDOM.createRoot(document.getElementById("root") as HTMLElement).render(
