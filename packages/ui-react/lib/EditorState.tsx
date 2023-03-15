@@ -24,7 +24,7 @@ const ensureKeyframes = (project: Project) => ({
 const projectAtom = atom<Project>({
   keyframes: [],
   name: "Untitled",
-  totalTime: 0,
+  totalTime: 10,
   font: "JetBrains Mono",
   animationDuration: 0.3,
   showBackground: false,

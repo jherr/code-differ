@@ -161,8 +161,6 @@ function Toolbar() {
 
   const codeFrames = useCodeFrames();
 
-  console.log(animatorCtx);
-
   const onSendToAfterEffects = () => {
     const { sprites } = createMeasuredSprites(project, 50);
     const { extents, extentsByCodeSegment } = calculateExtents(sprites);
