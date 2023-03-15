@@ -1,35 +1,4 @@
-.token {
-}
-
-.pre-shown {
-  display: none;
-}
-
-.shown {
-}
-
-.hidden {
-  display: none;
-}
-
-@keyframes fadeOut {
-  0% {
-    opacity: 100;
-  }
-  100% {
-    opacity: 0;
-  }
-}
-
-@keyframes fadeIn {
-  0% {
-    opacity: 0;
-  }
-  100% {
-    opacity: 100;
-  }
-}
-
-.code-preview {
-  background-color: black;
+@font-face {
+  font-family: 'Dank Mono';
+  src: url("/DankMono-Regular.ttf") format("truetype"), url("/DankMono-Italic.ttf") format("truetype"), url("/DankMono-Bold.ttf") format("truetype");
 }

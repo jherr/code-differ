@@ -22,7 +22,7 @@ function Editor() {
     <Box
       sx={{
         "& .cm-content, & .cm-gutter": {
-          fontFamily: `${FONTS[project.font].web}, Courier New`,
+          fontFamily: `${FONTS[project.font].web}`,
           fontSize: 20,
         },
       }}

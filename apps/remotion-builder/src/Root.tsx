@@ -1,8 +1,28 @@
-import {Composition} from 'remotion';
+import {Composition, continueRender, delayRender, staticFile} from 'remotion';
 import {MyComposition} from './Composition';
 import './style.css';
 
 import {Project, getLayers, getLayerExtents} from 'engine';
+
+const font = new FontFace(
+	`Dank Mono`,
+	`url('${staticFile(
+		'/DankMono-Regular.ttf'
+	)}') format('truetype'), url('${staticFile(
+		'/DankMono-Italic.ttf'
+	)}') format('truetype'), url('${staticFile(
+		'/DankMono-Italic.ttf'
+	)}') format('truetype')`
+);
+
+const waitForFont = delayRender();
+font
+	.load()
+	.then(() => {
+		document.fonts.add(font);
+		continueRender(waitForFont);
+	})
+	.catch((err) => console.log('Error loading font', err));
 
 import projectData from '../Code-1-project.json';
 

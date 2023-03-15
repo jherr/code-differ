@@ -1,7 +1,6 @@
 const ae = require("after-effects");
 
 async function sendToAE(data) {
-  console.log(data);
   try {
     await ae.execute((data) => {
       function sanitizedColor(v) {

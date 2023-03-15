@@ -89,7 +89,7 @@ const EffectsEditor = () => {
       <div
         style={{
           position: "relative",
-          fontFamily: `${FONTS[project.font].web}, Courier New`,
+          fontFamily: `${FONTS[project.font].web}`,
           fontSize: PREVIEW_FONT_SIZE,
           background: "black",
           height,

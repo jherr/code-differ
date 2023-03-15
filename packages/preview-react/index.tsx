@@ -42,7 +42,7 @@ const Preview = ({
           position: "relative",
           width: width ?? calculatedWidth,
           height: height ?? calculatedHeight,
-          fontFamily: `${FONTS[project.font].web}, Courier New`,
+          fontFamily: `${FONTS[project.font].web}`,
           fontSize,
         }}
         className="code-preview"

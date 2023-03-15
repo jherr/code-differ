@@ -1,0 +1,4 @@
+@font-face {
+  font-family: 'Dank Mono';
+  src: url("../public/DankMono-Regular.ttf") format("truetype"), url("../public/DankMono-Italic.ttf") format("truetype"), url("../public/DankMono-Bold.ttf") format("truetype");
+}
