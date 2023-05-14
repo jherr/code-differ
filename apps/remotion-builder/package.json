@@ -33,6 +33,5 @@
     "prettier": "^2.8.1",
     "tsconfig": "workspace:*",
     "typescript": "^4.9.4"
-  },
-  "packageManager": "npm@8.11.0"
+  }
 }
